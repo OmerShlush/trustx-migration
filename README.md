@@ -219,10 +219,6 @@ Logs are written to both console and file (configurable in `config.json`).
 4. Add tests if applicable
 5. Submit a pull request
 
-## License
-
-[Add your license information here]
-
 ## Support
 
 For support and questions:
