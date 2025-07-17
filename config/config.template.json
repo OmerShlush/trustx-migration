@@ -1,0 +1,21 @@
+{
+    "source": {
+        "base_url": "https://your-source-environment.trustx.com",
+        "process_definition_id": "YOUR_SOURCE_PROCESS_DEFINITION_ID",
+        "api_key": "YOUR_SOURCE_API_KEY"
+    },
+    "dest": {
+        "base_url": "https://your-destination-environment.trustx.com",
+        "api_key": "YOUR_DESTINATION_API_KEY",
+        "process_definition_name": "YOUR_NEW_PROCESS_DEFINITION_NAME"
+    },
+    "output_dir": "output",
+    "logging": {
+        "level": "INFO",
+        "file": "logs/migration.log"
+    },
+    "migration": {
+        "created_by": "your.email@company.com",
+        "tenant_id": "your_tenant_id"
+    }
+}

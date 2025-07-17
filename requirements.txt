@@ -1,0 +1,26 @@
+# HTTP requests library for API calls
+requests>=2.31.0
+
+# XML processing for BPMN files
+lxml>=4.9.0
+
+# HTML/XML parsing for custom pages
+beautifulsoup4>=4.12.0
+
+# Type hints support (for Python < 3.9)
+typing-extensions>=4.8.0
+
+# Additional dependencies for better development experience
+# Uncomment if needed for your environment
+
+# For development and testing
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# For code formatting and linting
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.5.0
+
+# For environment variable management
+# python-dotenv>=1.0.0
