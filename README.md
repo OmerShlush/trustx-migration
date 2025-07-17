@@ -49,14 +49,13 @@ A comprehensive migration tool for TrustX process definitions, including BPMN fi
            "process_definition_name": "YOUR_NEW_PROCESS_DEFINITION_NAME"
        },
        "output_dir": "output",
-       "logging": {
-           "level": "INFO",
-           "file": "logs/migration.log"
-       },
-       "migration": {
-           "created_by": "your.email@company.com",
-           "tenant_id": "your_tenant_id"
-       }
+        "logging": {
+            "log_file": "logs/migration.log",
+            "log_level_console": "INFO",
+            "log_level_file": "DEBUG",
+            "max_bytes": 5000000,
+            "backup_count": 5
+        }
    }
    ```
 

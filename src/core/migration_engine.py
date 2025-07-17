@@ -97,9 +97,7 @@ class MigrationEngine:
                     bearer_token=token,
                     base_url=dest_base_url,
                     theme_json_path=f"{theme_path}/theme.json",
-                    assets_folder=f"{theme_path}/assets",
-                    created_by=self.config.get("migration", {}).get("created_by", "migration@trustx.com"),
-                    tenant_id=self.config.get("migration", {}).get("tenant_id", "default")
+                    assets_folder=f"{theme_path}/assets"
                 )
 
                 aggregation["theme"] = created_theme

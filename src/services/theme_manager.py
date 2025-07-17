@@ -67,7 +67,7 @@ def fetch_and_save_theme(bearer_token: str, theme_id: str, base_url: str, output
 
 
 def push_theme_to_env(bearer_token: str, base_url: str, theme_json_path: str, assets_folder: str,
-                      created_by: str, tenant_id: str, output_file: str = "output/data/created_theme_info.json"):
+                      output_file: str = "output/data/created_theme_info.json"):
     headers = {
         'Authorization': f'Bearer {bearer_token}',
         'Content-Type': 'application/json',
@@ -126,31 +126,21 @@ def push_theme_to_env(bearer_token: str, base_url: str, theme_json_path: str, as
         # Step 4: Activate theme
         logger.info("Activating theme...")
         activation_url = f"{base_url}/api/theme-server/themes/{theme_id}/status/DEPLOYED_ACTIVE"
-        payload = {
-            "createdDtm": "",
-            "lastUpdatedDtm": "",
-            "createdBy": created_by,
-            "lastUpdatedBy": created_by,
-            "id": theme_id,
-            "tenantId": tenant_id,
-            "name": theme_data["name"],
-            "description": theme_data.get("description", ""),
-            "status": "DEPLOYED_ACTIVE",
-            "version": theme_data["version"]
-        }
+        payload = {}
 
         response = requests.post(activation_url, headers=headers, json=payload)
         response.raise_for_status()
         final_info = response.json()
         logger.info(f"Theme activated: {final_info}")
 
+        # Step 5: Store final info
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(final_info, f, indent=2)
+        logger.info(f"Final theme info stored at {output_file}")
+
         return final_info
 
-        # # Step 5: Store final info
-        # os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        # with open(output_file, "w", encoding="utf-8") as f:
-        #     json.dump(final_info, f, indent=2)
-        # logger.info(f"Final theme info stored at {output_file}")
 
     except Exception as e:
         logger.error(f"Failed to push theme: {e}", exc_info=True)
