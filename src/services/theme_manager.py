@@ -88,6 +88,7 @@ def push_theme_to_env(bearer_token: str, base_url: str, theme_json_path: str, as
         }
 
         response = requests.post(f"{base_url}/api/theme-server/themes", headers=headers, json=stripped_data)
+        logger.debug(response.json())
         response.raise_for_status()
         theme_id = response.json()["id"]
         logger.info(f"Theme created with ID: {theme_id}")

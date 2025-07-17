@@ -24,12 +24,13 @@ class MigrationEngine:
         self.config = config
         logger.info("Migration engine initialized.")
 
-    def migrate_process_definition(self, api_key: str, source_base_url: str, dest_base_url: str, pd_id: str, pd_name: str, output_dir: str = "output"):
+    def migrate_process_definition(self, api_key: str, dest_api_key: str, source_base_url: str, dest_base_url: str, pd_id: str, pd_name: str, output_dir: str = "output"):
         _clean_output_folder(output_dir)
         logger.info(f"Starting migration for process definition: {pd_id}")
         try:
-            logger.debug("Obtaining a bearer token...")
+            logger.debug("Obtaining a bearer tokens...")
             token = get_token(api_key, source_base_url)
+            dest_token = get_token(dest_api_key, dest_base_url)
 
             logger.debug("Fetching BPMN data...")
             bpmn_data = fetch_bpmn(token, source_base_url, pd_id)
@@ -89,12 +90,13 @@ class MigrationEngine:
                 "watchlists": watchlists
             }
 
+
             theme_id = fetch_theme_id(token, source_base_url, pd_id)
             if theme_id is not None:
                 theme_path = fetch_and_save_theme(token, theme_id, source_base_url, output_dir=f'{output_dir}/data/theme')
 
                 created_theme = push_theme_to_env(
-                    bearer_token=token,
+                    bearer_token=dest_token,
                     base_url=dest_base_url,
                     theme_json_path=f"{theme_path}/theme.json",
                     assets_folder=f"{theme_path}/assets"
@@ -109,7 +111,7 @@ class MigrationEngine:
                     cf_script_path = os.path.join(output_dir, "data", "cf", f"{cf['name']}.py")
                     with open(cf_script_path, "r") as script_file:
                         SCRIPT = script_file.read()
-                    created_cf_result = create_cloud_function(dest_base_url, token, cf["name"], SCRIPT, output_file=f'{output_dir}/results/{cf["name"]}.json')
+                    created_cf_result = create_cloud_function(dest_base_url, dest_token, cf["name"], SCRIPT, output_file=f'{output_dir}/results/{cf["name"]}.json')
                     aggregation["cloud_functions"].append(created_cf_result)
                 except Exception as e:
                     logger.warning(f"Failed to push Cloud Function '{cf['name']}': {e}")
@@ -120,7 +122,7 @@ class MigrationEngine:
                     form_script_path = os.path.join(output_dir, "data", "forms", f"{form['name']}.json")
                     with open(form_script_path, "r") as script_file:
                         SCRIPT = script_file.read()
-                    created_form_result = create_custom_data_form(dest_base_url, token, form["name"], SCRIPT, output_file=f'{output_dir}/results/{form["name"]}.json')
+                    created_form_result = create_custom_data_form(dest_base_url, dest_token, form["name"], SCRIPT, output_file=f'{output_dir}/results/{form["name"]}.json')
                     aggregation["custom_forms"].append(created_form_result)
                 except Exception as e:
                     logger.warning(f"Failed to push Custom Form '{form['name']}': {e}")
@@ -129,7 +131,7 @@ class MigrationEngine:
                 try:
                     logger.info(f"Pushing Custom Page: {page['name']} (v{page.get('version')})")
                     zip_path = os.path.join(f'{output_dir}/data/custom_pages/', f'{page['name']}_v{page.get('version', 1)}.zip')
-                    created_cp_result = create_custom_page(dest_base_url, token, page["name"], zip_path, output_file=f'{output_dir}/results/{page["name"]}.json')
+                    created_cp_result = create_custom_page(dest_base_url, dest_token, page["name"], zip_path, output_file=f'{output_dir}/results/{page["name"]}.json')
                     aggregation["custom_pages"].append(created_cp_result)
                 except Exception as e:
                     logger.warning(f"Failed to migrate Custom Page '{page['name']}': {e}")
@@ -153,7 +155,7 @@ class MigrationEngine:
             # Create Process Definition
             create_process_definition(
             dest_base_url,
-            token,
+            dest_token,
             name=pd_name,
             bpmn_file_path=updated_bpmn_path,
             theme_id=theme_id

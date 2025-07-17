@@ -1,9 +1,10 @@
 import os
 import json
 from typing import Dict, Any
-from utils.logger import get_logger
+import logging
 
-logger = get_logger(__name__)
+logger = logging.getLogger("ConfigManager")
+
 
 class ConfigManager:
     """Manages configuration loading from environment variables and config files."""
