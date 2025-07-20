@@ -151,14 +151,14 @@ class MigrationEngine:
                 output_dir=output_dir,
                 pd_name=pd_name
             )
-
+            
             # Create Process Definition
             create_process_definition(
-            dest_base_url,
-            dest_token,
-            name=pd_name,
-            bpmn_file_path=updated_bpmn_path,
-            theme_id=theme_id
+                dest_base_url,
+                dest_token,
+                name=pd_name,
+                bpmn_file_path=updated_bpmn_path,
+                theme_id=aggregation["theme"]["id"] if aggregation["theme"] else None
             )
         except Exception as e:
             logger.error(f"Error migrating process definition {pd_id}: {str(e)}", exc_info=True)
