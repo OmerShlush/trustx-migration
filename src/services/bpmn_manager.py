@@ -141,7 +141,7 @@ def update_bpmn_versions(
                 if name in cf_versions:
                     old = param_map["functionVersion"].text
                     param_map["functionVersion"].text = str(cf_versions[name])
-                    logger.debug(f"Updated CF version for '{name}': {old} → {cf_versions[name]}")
+                    logger.debug(f"Updated CF version for '{name}': {old} -> {cf_versions[name]}")
 
             # Custom Form
             if "dataFormName" in param_map and "dataFormVersion" in param_map:
@@ -149,7 +149,7 @@ def update_bpmn_versions(
                 if name in form_versions:
                     old = param_map["dataFormVersion"].text
                     param_map["dataFormVersion"].text = str(form_versions[name])
-                    logger.debug(f"Updated Form version for '{name}': {old} → {form_versions[name]}")
+                    logger.debug(f"Updated Form version for '{name}': {old} -> {form_versions[name]}")
 
             # Custom Page
             if "customPageName" in param_map and "customPageVersion" in param_map:
@@ -157,7 +157,7 @@ def update_bpmn_versions(
                 if name in page_versions:
                     old = param_map["customPageVersion"].text
                     param_map["customPageVersion"].text = str(page_versions[name])
-                    logger.debug(f"Updated Page version for '{name}': {old} → {page_versions[name]}")
+                    logger.debug(f"Updated Page version for '{name}': {old} -> {page_versions[name]}")
 
         # Save updated BPMN
         output_path = os.path.join(output_dir, "data", f"{pd_name}.bpmn")

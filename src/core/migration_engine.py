@@ -109,7 +109,7 @@ class MigrationEngine:
                 try:
                     logger.info(f"Pushing Cloud Function: {cf['name']} (v{cf.get('version')})")
                     cf_script_path = os.path.join(output_dir, "data", "cf", f"{cf['name']}.py")
-                    with open(cf_script_path, "r") as script_file:
+                    with open(cf_script_path, "r", encoding="utf-8") as script_file:
                         SCRIPT = script_file.read()
                     created_cf_result = create_cloud_function(dest_base_url, dest_token, cf["name"], SCRIPT, output_file=f'{output_dir}/results/{cf["name"]}.json')
                     aggregation["cloud_functions"].append(created_cf_result)
@@ -120,7 +120,7 @@ class MigrationEngine:
                 try:
                     logger.info(f"Pushing Custom Form: {form['name']} (v{form.get('version')})")
                     form_script_path = os.path.join(output_dir, "data", "forms", f"{form['name']}.json")
-                    with open(form_script_path, "r") as script_file:
+                    with open(form_script_path, "r", encoding="utf-8") as script_file:
                         SCRIPT = script_file.read()
                     created_form_result = create_custom_data_form(dest_base_url, dest_token, form["name"], SCRIPT, output_file=f'{output_dir}/results/{form["name"]}.json')
                     aggregation["custom_forms"].append(created_form_result)
@@ -140,7 +140,7 @@ class MigrationEngine:
             agg_path = os.path.join(output_dir, "results", "aggregation.json")
             os.makedirs(os.path.dirname(agg_path), exist_ok=True)
 
-            with open(agg_path, "w") as agg_file:
+            with open(agg_path, "w", encoding="utf-8") as agg_file:
                 json.dump(aggregation, agg_file, indent=2)
                 logger.info(f"Migration aggregation saved to {agg_path}")
 

@@ -1,7 +1,17 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+import sys
 from utils.config_manager import ConfigManager
+
+# Set console encoding to UTF-8 on Windows to handle Unicode properly
+if sys.platform == "win32":
+    try:
+        import codecs
+        sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+        sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
+    except:
+        pass  # Fallback if codec setup fails
 
 # Load and validate configuration
 config_manager = ConfigManager()
@@ -33,6 +43,14 @@ def get_logger(name: str) -> logging.Logger:
         ch = logging.StreamHandler()
         ch.setLevel(getattr(logging, LOG_LEVEL_CONSOLE, logging.INFO))
         ch.setFormatter(formatter)
+        
+        # Handle Unicode properly on Windows
+        if hasattr(ch.stream, 'reconfigure'):
+            try:
+                ch.stream.reconfigure(encoding='utf-8')
+            except:
+                pass  # Fallback if reconfigure fails
+        
         logger.addHandler(ch)
 
         # File Handler

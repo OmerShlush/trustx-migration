@@ -127,7 +127,7 @@ def _download_preview_assets(preview_url: str, output_dir: str) -> None:
 
                 with open(local_asset_path, "wb") as f:
                     f.write(asset_resp.content)
-                logger.info(f"Downloaded asset: {asset_url} → {local_asset_path}")
+                logger.info(f"Downloaded asset: {asset_url} -> {local_asset_path}")
             except Exception as e:
                 logger.warning(f"Failed to download asset '{asset_path}': {e}")
 
